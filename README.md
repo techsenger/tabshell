@@ -630,7 +630,7 @@ menu's visibility.
 * Group — `ManagedMenuGroup` has no JavaFX equivalent; it exists purely so that items contributed by
 independent, mutually unaware sources can still be visually clustered and ordered together within one menu, with
 groups separated from each other by a separator. A group that ends up with no visible items, and the separator
-around it, are both hidden — see **Manager** below for how that stays correct as contributions change at runtime.
+around it, are both hidden — see Manager below for how that stays correct as contributions change at runtime.
 * Handler — `Handler` declares `onUpdate`/`onShowing`/`onHiding`; `MenuItemHandler` adds `onAction` for leaf
 items. `MenuHandler` and `ContextMenuHandler` attach to a `ManagedMenu`/`ManagedContextMenu` respectively and decide
 that control's own visibility directly, without knowing anything about its children — which matters because a menu
