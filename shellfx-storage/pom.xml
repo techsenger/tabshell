@@ -27,10 +27,6 @@
             <artifactId>shellfx-material</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.techsenger.shellfx</groupId>
-            <artifactId>shellfx-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.techsenger.toolkit</groupId>
             <artifactId>toolkit-core</artifactId>
         </dependency>
