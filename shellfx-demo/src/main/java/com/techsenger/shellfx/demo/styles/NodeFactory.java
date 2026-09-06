@@ -19,11 +19,11 @@ package com.techsenger.shellfx.demo.styles;
 import atlantafx.base.theme.Styles;
 import com.techsenger.annotations.Nullable;
 import com.techsenger.shellfx.devtools.style.DevToolsIcons;
-import com.techsenger.shellfx.dialogs.style.DialogIcons;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.icon.StyleFontIcon;
 import com.techsenger.shellfx.material.style.StyleClasses;
 import com.techsenger.shellfx.shared.style.SharedIcons;
+import com.techsenger.shellfx.storage.style.StorageIcons;
 import java.util.List;
 import java.util.stream.IntStream;
 import javafx.beans.property.SimpleStringProperty;
@@ -66,7 +66,7 @@ final class NodeFactory {
     }
 
     static Button createIconButton(String styleClass) {
-        var b = new Button(null, new FontIconView(DialogIcons.FOLDER));
+        var b = new Button(null, new FontIconView(StorageIcons.FOLDER));
         b.getStyleClass().add(StyleClasses.SQUARE);
         if (styleClass != null) {
             b.getStyleClass().add(styleClass);

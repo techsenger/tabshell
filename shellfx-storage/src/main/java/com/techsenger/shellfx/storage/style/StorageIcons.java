@@ -31,4 +31,8 @@ public interface StorageIcons {
     StyleFontIcon BASE_DISK = new StyleFontIcon("base-disk-icon");
 
     StyleFontIcon NETWORK_DISK = new StyleFontIcon("network-disk-icon");
+
+    StyleFontIcon FOLDER = new StyleFontIcon("folder-icon");
+
+    StyleFontIcon FILE = new StyleFontIcon("file-icon");
 }

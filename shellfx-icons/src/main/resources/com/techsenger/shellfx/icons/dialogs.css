@@ -65,11 +65,3 @@
 .font-icon-view.save-as-icon {
     -fx-icon-code: 986364; /* content-save-edit-outline */
 }
-
-.font-icon-view.folder-icon {
-    -fx-icon-code: 983627; /* folder */
-}
-
-.font-icon-view.file-icon {
-    -fx-icon-code: 983588; /* file-outline */
-}

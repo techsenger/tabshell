@@ -28,19 +28,19 @@ import javax.swing.filechooser.FileSystemView;
  *
  * @author Pavel Castornii
  */
-public class UnixFileStorage<T extends GenericFile> extends AbstractDefaultFileStorage<T> {
+public class UnixFileStorage<T extends GenericFile> extends AbstractSystemFileStorage<T> {
 
     /**
-     * Discovers and returns all default storages available on the current Unix machine.
+     * Discovers and returns all system storages available on the current Unix machine.
      *
      * <p>Each root directory reported by the default {@link FileSystem} is wrapped in a
      * {@link UnixFileStorage} instance with type {@link FileStorageType#BASE}. The display name
      * is obtained from {@link FileSystemView#getSystemDisplayName(java.io.File)}.
      *
      * @param fileFactory the factory used to create file entries, must not be {@code null}
-     * @return a mutable list of default storages, never {@code null}, may be empty
+     * @return a mutable list of system storages, never {@code null}, may be empty
      */
-    public static List<FileStorage<GenericFile>> createDefaultStorages(
+    public static List<FileStorage<GenericFile>> createSystemStorages(
             Factory<? extends DefaultGenericFile> fileFactory) {
         List<FileStorage<GenericFile>> result = new ArrayList<>();
         FileSystemView fsv = FileSystemView.getFileSystemView();

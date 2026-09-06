@@ -17,7 +17,9 @@
 package com.techsenger.shellfx.storage;
 
 import com.techsenger.annotations.Nullable;
+import com.techsenger.shellfx.material.icon.FontIcon;
 import static com.techsenger.shellfx.storage.UriUtils.getParentUri;
+import com.techsenger.shellfx.storage.style.StorageIcons;
 import com.techsenger.toolkit.core.file.FileUtils;
 import com.techsenger.toolkit.core.function.Factory;
 import java.io.IOException;
@@ -45,16 +47,27 @@ import org.slf4j.LoggerFactory;
  *
  * @author Pavel Castornii
  */
-public abstract class AbstractDefaultFileStorage<T extends GenericFile> extends AbstractFileStorage<T> {
+public abstract class AbstractSystemFileStorage<T extends GenericFile> extends AbstractFileStorage<T> {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractDefaultFileStorage.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractSystemFileStorage.class);
 
     private final Factory<? extends DefaultGenericFile> fileFactory;
 
-    public AbstractDefaultFileStorage(FileStorageType type, String displayName, URI rootUri,
+    public AbstractSystemFileStorage(FileStorageType type, String displayName, URI rootUri,
             Factory<? extends DefaultGenericFile> fileFactory) {
-        super(type, displayName, rootUri, true);
+        super(type, displayName, rootUri);
         this.fileFactory = fileFactory;
+    }
+
+    @Override
+    public FontIcon<?> getIcon() {
+        return switch (getType()) {
+            case BASE -> StorageIcons.BASE_DISK;
+            case NETWORK -> StorageIcons.NETWORK_DISK;
+            case FLOPPY -> StorageIcons.FLOPPY;
+            case OPTICAL -> StorageIcons.DISC;
+            default -> throw new AssertionError("Unknown type for system storage");
+        };
     }
 
     @Override
@@ -177,7 +190,9 @@ public abstract class AbstractDefaultFileStorage<T extends GenericFile> extends 
         file.setUri(getUri());
         file.setStorage(this);
         file.setName(getDisplayName());
-        return (T) file;
+        var result = (T) file;
+        file.setIcon(resolveIcon(result));
+        return result;
     }
 
     @Override
@@ -198,7 +213,9 @@ public abstract class AbstractDefaultFileStorage<T extends GenericFile> extends 
         file.setUri(uri);
         file.setStorage(this);
         file.setVirtual(true);
-        return (T) file;
+        var result = (T) file;
+        file.setIcon(resolveIcon(result));
+        return result;
     }
 
     @Override
@@ -252,6 +269,16 @@ public abstract class AbstractDefaultFileStorage<T extends GenericFile> extends 
 
     protected Factory<? extends DefaultGenericFile> getFileFactory() {
         return fileFactory;
+    }
+
+    /**
+     * Resolves the icon assigned to {@code file} when it is constructed, before it is exposed to callers.
+     *
+     * @param file the file being constructed, must not be {@code null}
+     * @return the icon, never {@code null}
+     */
+    protected FontIcon<?> resolveIcon(T file) {
+        return file.isDirectory() ? StorageIcons.FOLDER : StorageIcons.FILE;
     }
 
     protected void checkWritable(Path path) throws AccessDeniedException {
@@ -314,7 +341,9 @@ public abstract class AbstractDefaultFileStorage<T extends GenericFile> extends 
             file.setSize(attrs.size());
         }
         file.setVirtual(false);
-        return (T) file;
+        var result = (T) file;
+        file.setIcon(resolveIcon(result));
+        return result;
     }
 
     private boolean isHidden(Path path) {

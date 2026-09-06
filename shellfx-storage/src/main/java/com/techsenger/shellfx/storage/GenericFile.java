@@ -17,6 +17,7 @@
 package com.techsenger.shellfx.storage;
 
 import com.techsenger.annotations.Nullable;
+import com.techsenger.shellfx.material.icon.FontIcon;
 import java.net.URI;
 import java.util.Objects;
 
@@ -108,6 +109,14 @@ public interface GenericFile {
      * @return {@code true} if virtual, {@code false} if backed by a real storage entry
      */
     boolean isVirtual();
+
+    /**
+     * Returns the icon representing this entry in the UI - either explicitly assigned, or resolved by the
+     * owning {@link #getStorage() storage} otherwise.
+     *
+     * @return the icon, never {@code null}
+     */
+    FontIcon<?> getIcon();
 
     /**
      * Returns {@code true} if this entry is a directory.

@@ -31,18 +31,11 @@ public abstract class AbstractFileStorage<T extends GenericFile> implements File
 
     private final URI uri;
 
-    private final boolean isDefault;
-
-    public AbstractFileStorage(FileStorageType type, String displayName, URI rootUri) {
-        this(type, displayName, rootUri, false);
-    }
-
-    AbstractFileStorage(FileStorageType type, String displayName, URI uri, boolean isDefault) {
+    public AbstractFileStorage(FileStorageType type, String displayName, URI uri) {
         this.type = type;
         this.displayName = displayName;
         var normalized = uri.normalize();
         this.uri = normalized;
-        this.isDefault = isDefault;
     }
 
     @Override
@@ -56,11 +49,6 @@ public abstract class AbstractFileStorage<T extends GenericFile> implements File
     }
 
     @Override
-    public final boolean isDefault() {
-        return isDefault;
-    }
-
-    @Override
     public URI getUri() {
         return uri;
     }
@@ -71,7 +59,6 @@ public abstract class AbstractFileStorage<T extends GenericFile> implements File
         hash = 79 * hash + Objects.hashCode(this.type);
         hash = 79 * hash + Objects.hashCode(this.displayName);
         hash = 79 * hash + Objects.hashCode(this.uri.toString());
-        hash = 79 * hash + (this.isDefault ? 1 : 0);
         return hash;
     }
 
@@ -87,9 +74,6 @@ public abstract class AbstractFileStorage<T extends GenericFile> implements File
             return false;
         }
         final AbstractFileStorage other = (AbstractFileStorage) obj;
-        if (this.isDefault != other.isDefault) {
-            return false;
-        }
         if (!Objects.equals(this.displayName, other.displayName)) {
             return false;
         }
@@ -101,7 +85,6 @@ public abstract class AbstractFileStorage<T extends GenericFile> implements File
 
     @Override
     public String toString() {
-        return "AbstractFileStorage[" + "type=" + type + ", displayName=" + displayName + ", uri=" + uri
-                + ", isDefault=" + isDefault + ']';
+        return "AbstractFileStorage[" + "type=" + type + ", displayName=" + displayName + ", uri=" + uri + ']';
     }
 }

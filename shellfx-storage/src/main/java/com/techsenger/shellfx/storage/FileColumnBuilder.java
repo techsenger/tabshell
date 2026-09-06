@@ -16,14 +16,12 @@
 
 package com.techsenger.shellfx.storage;
 
-import com.techsenger.shellfx.material.icon.FontIcon;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.table.NamedTableColumn;
 import com.techsenger.shellfx.material.table.TextFieldTableCell;
 import com.techsenger.toolkit.core.file.FileUtils;
 import java.time.Year;
 import java.util.Comparator;
-import java.util.function.Function;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.control.TableCell;
 import javafx.scene.layout.HBox;
@@ -46,8 +44,7 @@ public class FileColumnBuilder {
      *
      * @return
      */
-    public <F extends GenericFile> NamedTableColumn<F, F> buildNameColumn(Function<F, FontIcon<?>>
-            iconProvider) {
+    public <F extends GenericFile> NamedTableColumn<F, F> buildNameColumn() {
         var nameColumn = new NamedTableColumn<F, F>(FileColumns.NAME, "Name");
         nameColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper(data.getValue()));
         var converter = new FileStringConverter<F>();
@@ -67,7 +64,7 @@ public class FileColumnBuilder {
                     } else {
                         iconView.setOpacity(1.0);
                     }
-                    iconView.setIcon(iconProvider.apply(file));
+                    iconView.setIcon(file.getIcon());
                     setGraphic(iconView);
                     setText(file.getName());
                 }

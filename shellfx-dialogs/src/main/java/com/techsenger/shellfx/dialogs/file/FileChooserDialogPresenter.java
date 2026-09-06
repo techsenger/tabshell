@@ -27,7 +27,7 @@ import static com.techsenger.shellfx.dialogs.file.FileChooserType.OPEN;
 import static com.techsenger.shellfx.dialogs.file.FileChooserType.SAVE_AS;
 import com.techsenger.shellfx.dialogs.style.DialogIcons;
 import com.techsenger.shellfx.material.button.ResultButtonName;
-import com.techsenger.shellfx.material.icon.StyleFontIcon;
+import com.techsenger.shellfx.material.icon.FontIcon;
 import com.techsenger.shellfx.material.table.TableColumnInfo;
 import com.techsenger.shellfx.material.table.TableColumnName;
 import com.techsenger.shellfx.material.table.TableHistory;
@@ -38,7 +38,7 @@ import com.techsenger.shellfx.storage.FileStorage;
 import com.techsenger.shellfx.storage.FileStorageUtils;
 import com.techsenger.shellfx.storage.GenericFile;
 import com.techsenger.shellfx.storage.UriUtils;
-import com.techsenger.shellfx.storage.style.StorageIconProvider;
+import com.techsenger.shellfx.storage.style.StorageIcons;
 import com.techsenger.toolkit.core.file.FileUtils;
 import java.net.URI;
 import java.nio.file.Paths;
@@ -395,7 +395,7 @@ public class FileChooserDialogPresenter<V extends FileChooserDialogView<T>, T ex
                     var segment = segments.get(i);
                     var segmentUri = UriUtils.resolvePath(previousUri, segment, true);
                     var directoryLocation = new Location(
-                            DialogIcons.FOLDER,
+                            StorageIcons.FOLDER,
                             segment,
                             i + 1,
                             storage,
@@ -627,7 +627,7 @@ public class FileChooserDialogPresenter<V extends FileChooserDialogView<T>, T ex
     }
 
     private void setDefaultStorageAndDirectory() {
-        var s = FileStorageUtils.findPrimary(storages);
+        var s = FileStorageUtils.findLocal(storages).stream().findFirst();
         if (s.isEmpty()) {
             this.storage = null;
         } else {
@@ -654,7 +654,7 @@ public class FileChooserDialogPresenter<V extends FileChooserDialogView<T>, T ex
             location = createLocation(storage);
         } else {
             location = new Location(
-                    DialogIcons.FOLDER,
+                    StorageIcons.FOLDER,
                     segments.get(segments.size() - 1),
                     segments.size(),
                     storage,
@@ -669,7 +669,7 @@ public class FileChooserDialogPresenter<V extends FileChooserDialogView<T>, T ex
     }
 
     private Location createLocation(FileStorage storage) {
-        StyleFontIcon icon = StorageIconProvider.INSTANCE.apply(storage.getType());
+        FontIcon<?> icon = storage.getIcon();
         var location = new Location(
                 icon,
                 storage.getDisplayName(),

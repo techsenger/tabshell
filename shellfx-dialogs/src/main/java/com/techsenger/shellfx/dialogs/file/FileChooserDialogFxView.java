@@ -28,7 +28,6 @@ import com.techsenger.shellfx.dialogs.alert.AlertDialogPresenter;
 import com.techsenger.shellfx.dialogs.style.DialogIcons;
 import com.techsenger.shellfx.material.button.ResultButton;
 import com.techsenger.shellfx.material.column.TextFieldColumnListCell;
-import com.techsenger.shellfx.material.icon.FontIcon;
 import com.techsenger.shellfx.material.icon.FontIconView;
 import com.techsenger.shellfx.material.style.Spacing;
 import com.techsenger.shellfx.material.style.StyleClasses;
@@ -44,7 +43,6 @@ import com.techsenger.toolkit.fx.value.ValueUtils;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -166,8 +164,7 @@ public class FileChooserDialogFxView<P extends FileChooserDialogPresenter<?, T>,
                 setText(null);
             } else {
                 if (item.getEntryType() != null) {
-                    var icon = iconProvider.apply(item);
-                    iconView.setIcon(icon);
+                    iconView.setIcon(item.getIcon());
                     if (item.isHidden()) {
                         iconView.setOpacity(FileViewConstants.HIDDEN_FILE_OPACITY);
                     } else {
@@ -234,9 +231,6 @@ public class FileChooserDialogFxView<P extends FileChooserDialogPresenter<?, T>,
     private final ResultButton okButton = new ResultButton(FileChooserDialogButtons.OK, "OK");
 
     private AppearanceSettings settings;
-
-    private Function<T, FontIcon<?>> iconProvider =
-            (f) -> f.isDirectory() ? DialogIcons.FOLDER : DialogIcons.FILE;
 
     public FileChooserDialogFxView() {
         super();
@@ -367,14 +361,6 @@ public class FileChooserDialogFxView<P extends FileChooserDialogPresenter<?, T>,
         this.filterComboBox.getSelectionModel().select(filter);
     }
 
-    public Function<T, FontIcon<?>> getIconProvider() {
-        return iconProvider;
-    }
-
-    public void setIconProvider(Function<T, FontIcon<?>> iconProvider) {
-        this.iconProvider = iconProvider;
-    }
-
     @Override
     protected Composer createComposer() {
         return new FileChooserDialogFxView.Composer();
@@ -399,7 +385,7 @@ public class FileChooserDialogFxView<P extends FileChooserDialogPresenter<?, T>,
 
         var columnBuilder = new FileColumnBuilder(settings.getRegularFont());
         this.fileColumnManager.registerColumnFactory(FileColumns.NAME, () -> {
-            var column = columnBuilder.buildNameColumn(iconProvider);
+            var column = columnBuilder.<T>buildNameColumn();
             column.setEditable(false);
             column.setOnEditCancel(e -> {
                 var file = (T) e.getOldValue();

@@ -17,6 +17,7 @@
 package com.techsenger.shellfx.storage;
 
 import com.techsenger.annotations.Nullable;
+import com.techsenger.shellfx.material.icon.FontIcon;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -67,12 +68,11 @@ public interface FileStorage<T extends GenericFile> {
     String getDisplayName();
 
     /**
-     * Returns {@code true} if this is the default storage for the current platform or user
-     * session. There should be at most one default storage per storage type.
+     * Returns the icon representing this storage in the UI (e.g. a location bar or a directory tree root).
      *
-     * @return {@code true} if this storage is the default, {@code false} otherwise
+     * @return the icon, never {@code null}
      */
-    boolean isDefault();
+    FontIcon<?> getIcon();
 
     /**
      * Returns the root directory entry of this storage.

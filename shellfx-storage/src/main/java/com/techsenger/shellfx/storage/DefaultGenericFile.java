@@ -17,6 +17,7 @@
 package com.techsenger.shellfx.storage;
 
 import com.techsenger.annotations.Nullable;
+import com.techsenger.shellfx.material.icon.FontIcon;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class DefaultGenericFile implements GenericFile {
     private boolean hidden;
 
     private boolean virtual;
+
+    private FontIcon<?> icon;
 
     /**
      * Constructs an empty {@code DefaultGenericFile}. Fields should be populated by the
@@ -107,6 +110,11 @@ public class DefaultGenericFile implements GenericFile {
     @Override
     public boolean isVirtual() {
         return virtual;
+    }
+
+    @Override
+    public FontIcon<?> getIcon() {
+        return icon;
     }
 
     /**
@@ -273,6 +281,15 @@ public class DefaultGenericFile implements GenericFile {
      */
     protected void setVirtual(boolean virtual) {
         this.virtual = virtual;
+    }
+
+    /**
+     * Sets the icon representing this entry in the UI.
+     *
+     * @param icon the icon to display, must not be {@code null}
+     */
+    protected void setIcon(FontIcon<?> icon) {
+        this.icon = icon;
     }
 
     private List<DefaultGenericFile> buildParents(int limit) {

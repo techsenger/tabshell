@@ -98,9 +98,9 @@ public class DialogsDialogPresenter extends AbstractDialogPresenter<DialogsDialo
         this.settings = params.getSettings();
         this.historyManager = params.getManager();
         if (OsUtils.isWindows()) {
-            this.storages = WindowsFileStorage.createDefaultStorages(DefaultGenericFile::new);
+            this.storages = WindowsFileStorage.createSystemStorages(DefaultGenericFile::new);
         } else {
-            this.storages = UnixFileStorage.createDefaultStorages(DefaultGenericFile::new);
+            this.storages = UnixFileStorage.createSystemStorages(DefaultGenericFile::new);
         }
     }
 

@@ -18,6 +18,8 @@ package com.techsenger.shellfx.storage;
 
 import java.net.URI;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -32,19 +34,35 @@ public final class FileStorageUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileStorageUtils.class);
 
     /**
-     * Returns the first storage with {@link FileStorageType#BASE} type that is marked as default.
+     * Returns all local disk storages among {@code storages} - those backed by the local file system (Unix or
+     * Windows), excluding both network shares and any storage registered programmatically (e.g. FTP, cloud,
+     * {@code Recent}), which never carry a local disk {@link FileStorageType}.
+     *
+     * <p>The result is ordered by media priority - all {@link FileStorageType#BASE} storages first, then
+     * {@link FileStorageType#OPTICAL}, then {@link FileStorageType#FLOPPY} - so a caller picking a single
+     * fallback (e.g. via {@code findLocal(storages).stream().findFirst()}) prefers a real disk over
+     * removable media, rather than depending on whatever order the storages happened to be discovered in.
      *
      * @param storages the list of storages to search, must not be {@code null}
-     * @return an {@link Optional} containing the primary storage, or empty if none matches
+     * @return an unmodifiable list, never {@code null}, may be empty
      */
-    public static <T extends GenericFile> Optional<FileStorage<T>> findPrimary(
-            List<? extends FileStorage<T>> storages) {
+    public static <T extends GenericFile> List<FileStorage<T>> findLocal(List<? extends FileStorage<T>> storages) {
+        var base = new ArrayList<FileStorage<T>>();
+        var optical = new ArrayList<FileStorage<T>>();
+        var floppy = new ArrayList<FileStorage<T>>();
         for (var s : storages) {
-            if (s.getType() == FileStorageType.BASE && s.isDefault()) {
-                return Optional.of(s);
+            switch (s.getType()) {
+                case BASE -> base.add(s);
+                case OPTICAL -> optical.add(s);
+                case FLOPPY -> floppy.add(s);
+                default -> { }
             }
         }
-        return Optional.empty();
+        var result = new ArrayList<FileStorage<T>>(base.size() + optical.size() + floppy.size());
+        result.addAll(base);
+        result.addAll(optical);
+        result.addAll(floppy);
+        return Collections.unmodifiableList(result);
     }
 
     /**
@@ -68,8 +86,9 @@ public final class FileStorageUtils {
     /**
      * Returns the file entry for the current user's home directory.
      *
-     * <p>The home directory is resolved from the {@code user.home} system property. The method searches the given
-     * storages for a default storage that covers the home URI and delegates to {@link FileStorage#getFile(URI)}.
+     * <p>The home directory is resolved from the {@code user.home} system property. The method searches the local
+     * disk storages among {@code storages} (see {@link #findLocal}) for one that covers the home URI and
+     * delegates to {@link FileStorage#getFile(URI)}.
      *
      * @param storages the list of storages to search, must not be {@code null}
      * @param <T>      the concrete file entry type produced by the storages
@@ -83,16 +102,16 @@ public final class FileStorageUtils {
             return Optional.empty();
         }
         var homeUri = Paths.get(str).toUri();
-        for (var s : storages) {
-            if (s.isDefault() && s.refersToStorage(homeUri)) {
-                try {
-                    return Optional.of(s.getFile(homeUri));
-                } catch (Exception ex) {
-                    logger.error("Error getting home file", ex);
-                }
-            }
+        var storage = findByUri(findLocal(storages), homeUri);
+        if (storage.isEmpty()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        try {
+            return Optional.of(storage.get().getFile(homeUri));
+        } catch (Exception ex) {
+            logger.error("Error getting home file", ex);
+            return Optional.empty();
+        }
     }
 
     private FileStorageUtils() {

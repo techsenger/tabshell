@@ -23,5 +23,5 @@ package com.techsenger.shellfx.storage;
  */
 public enum FileStorageType {
 
-    BASE, FLOPPY, OPTICAL, NETWORK
+    BASE, FLOPPY, OPTICAL, NETWORK, VIRTUAL
 }

@@ -16,7 +16,7 @@
 
 package com.techsenger.shellfx.dialogs.file;
 
-import com.techsenger.shellfx.material.icon.StyleFontIcon;
+import com.techsenger.shellfx.material.icon.FontIcon;
 import com.techsenger.shellfx.storage.FileStorage;
 import java.net.URI;
 
@@ -26,7 +26,7 @@ import java.net.URI;
  */
 public class Location {
 
-    private final StyleFontIcon icon;
+    private final FontIcon<?> icon;
 
     private final String name;
 
@@ -36,7 +36,7 @@ public class Location {
 
     private final URI uri;
 
-    Location(StyleFontIcon icon, String name, int level, FileStorage storage, URI uri) {
+    Location(FontIcon<?> icon, String name, int level, FileStorage storage, URI uri) {
         this.icon = icon;
         this.name = name;
         this.level = level;
@@ -44,7 +44,7 @@ public class Location {
         this.uri = uri;
     }
 
-    public StyleFontIcon getIcon() {
+    public FontIcon<?> getIcon() {
         return icon;
     }
 

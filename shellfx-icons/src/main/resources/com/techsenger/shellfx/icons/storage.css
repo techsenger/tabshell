@@ -43,3 +43,11 @@
     -fx-icon-code: 57350;
     -fx-icon-family: 'Techsenger MDI Extension';
 }
+
+.font-icon-view.folder-icon {
+    -fx-icon-code: 983627; /* folder */
+}
+
+.font-icon-view.file-icon {
+    -fx-icon-code: 983588; /* file-outline */
+}

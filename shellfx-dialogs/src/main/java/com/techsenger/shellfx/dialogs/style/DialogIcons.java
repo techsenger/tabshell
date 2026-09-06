@@ -45,10 +45,6 @@ public interface DialogIcons {
     StyleFontIcon OPEN = new StyleFontIcon("open-icon");
 
     StyleFontIcon SAVE_AS = new StyleFontIcon("save-as-icon");
-
-    StyleFontIcon FOLDER = new StyleFontIcon("folder-icon");
-
-    StyleFontIcon FILE = new StyleFontIcon("file-icon");
 }
 
 
